@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-export type Tile = 'SPACE' | 'POLYANET';
+export type Direction = 'up' | 'down' | 'left' | 'right';
+export type Color = 'blue' | 'red' | 'purple' | 'white';
+
+export type Polyanet = 'POLYANET';
+export type Cometh = 'UP_COMETH' | 'DOWN_COMETH' | 'LEFT_COMETH' | 'RIGHT_COMETH';
+export type Soloon = 'WHITE_SOLOON' | 'BLUE_SOLOON' | 'RED_SOLOON' | 'PURPLE_SOLOON';
+export type Tile = 'SPACE' | Polyanet | Cometh | Soloon ;
 export type Megaverse = Tile[][];
 
 export class CrossmintAPIService {
@@ -22,8 +28,40 @@ export class CrossmintAPIService {
     );
   }
 
+  async createCometh({ row, column, direction }: { row: number, column: number, direction: Direction }): Promise<void> {
+    const endpoint = `${this.baseURL}/comeths`;
+
+    await this.retryWithExponentialBackoff(() =>
+      axios.post(endpoint, { candidateId: this.candidateId, row, column, direction })
+    );
+  }
+
+  async createSoloon({ row, column, color }: { row: number, column: number, color: Color }): Promise<void> {
+    const endpoint = `${this.baseURL}/soloons`;
+
+    await this.retryWithExponentialBackoff(() =>
+      axios.post(endpoint, { candidateId: this.candidateId, row, column, color })
+    );
+  }
+
   async deletePolyanet({ row, column }: { row: number, column: number}): Promise<void> {
     const endpoint = `${this.baseURL}/polyanets`;
+
+    await this.retryWithExponentialBackoff(() =>
+      axios.delete(endpoint, { data: { candidateId: this.candidateId, row, column }})
+    );
+  }
+
+  async deleteCometh({ row, column }: { row: number, column: number}): Promise<void> {
+    const endpoint = `${this.baseURL}/comeths`;
+
+    await this.retryWithExponentialBackoff(() =>
+      axios.delete(endpoint, { data: { candidateId: this.candidateId, row, column }})
+    );
+  }
+
+  async deleteSoloon({ row, column }: { row: number, column: number}): Promise<void> {
+    const endpoint = `${this.baseURL}/soloons`;
 
     await this.retryWithExponentialBackoff(() =>
       axios.delete(endpoint, { data: { candidateId: this.candidateId, row, column }})
@@ -38,12 +76,12 @@ export class CrossmintAPIService {
   
     while (attempt < maxRetries) {
       try {
-        return await request(); // Try executing the request
+        return await request();
       } catch (error: any) {
         // Retry with exponential backoff if the API is rate limited
         if (error.response?.status === 429) {
           const delay = Math.pow(2, attempt) * 1000;
-          console.warn(`Attempt ${attempt + 1} failed (429). Retrying in ${delay / 1000} seconds...`);
+          console.warn(`Rate limit error, attempt ${attempt + 1}. Retry in ${delay / 1000} seconds.`);
           await new Promise(resolve => setTimeout(resolve, delay));
         } else {
           throw error;
