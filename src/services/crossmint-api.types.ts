@@ -1,4 +1,4 @@
-import { Color, Direction, MegaverseObjectType } from '../megaverse.entity';
+import { Color, Direction, Megaverse, MegaverseObjectType } from '../megaverse.entity';
 
 export const ComethDirectionMap: Record<string, Direction> = {
   'UP_COMETH': 'up',
@@ -44,3 +44,10 @@ export interface CreateSoloonInput extends CreateInputBase {
 }
 
 export type CreateMegaverseObjectInput = CreatePolyanetInput | CreateComethInput | CreateSoloonInput;
+
+
+export interface MegaverseAPIService {
+  getGoalMap(): Promise<Megaverse>;
+  createMegaverseObject(input: CreateMegaverseObjectInput): Promise<void>;
+  deleteMegaverseObject(input: { type: MegaverseObjectType, row: number, column: number }): Promise<void> 
+}

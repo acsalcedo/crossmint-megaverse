@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Color, Cometh, Direction, Megaverse, MegaverseObjectType, Polyanet, Soloon, Space } from '../megaverse.entity';
-import { SoloonColorMap, ComethDirectionMap, MegaverseApi, MegaverseApiObject, MegaverseObjectTypeToEndpointResourceName, CreateMegaverseObjectInput } from './crossmint-api.types';
+import { SoloonColorMap, ComethDirectionMap, MegaverseApi, MegaverseApiObject, MegaverseObjectTypeToEndpointResourceName, CreateMegaverseObjectInput, MegaverseAPIService } from './crossmint-api.types';
 
-export class CrossmintAPIService {
+export class CrossmintAPIService implements MegaverseAPIService {
   private candidateId = '44b615bd-8e1a-45e7-bbd2-5c57df3c2787';
   private baseURL = 'https://challenge.crossmint.io/api/';
   
