@@ -41,6 +41,7 @@ export class MegaverseService {
     const coordinates = [[0,-1], [0,1], [-1,0], [1,0]];
   
     // If the object is a soloon, then we need to check if one of the adjacent objects is a polyanet.
+    // If none of the adjacent objects are a polyanet, then the soloon cannot be created.
     return coordinates.some(([i, j]) => {
       const adjacentObject = megaverse[row + i]?.[column + j];
   

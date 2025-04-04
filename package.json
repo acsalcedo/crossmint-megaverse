@@ -11,8 +11,7 @@
     "lint:fix": "npx eslint --fix src/**/*.ts && npx eslint --fix test/**/*.ts",
     "prebuild": "npm run clean:dist",
     "build": "tsc",
-    "start": "node dist/src/index",
-    "start:dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node dist/index",
     "test": "NODE_ENV=test npx jest"
   },
   "devDependencies": {
