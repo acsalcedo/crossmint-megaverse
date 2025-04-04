@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*",
